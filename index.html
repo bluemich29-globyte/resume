@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michael Alemu | Sr. Data Engineer</title>
+  <meta name="description" content="Interactive resume website for Michael Alemu, Senior Data Engineer specializing in Azure Databricks, Lakehouse migration, PySpark, Delta Lake, and data validation." />
+  <style>
+    :root {
+      --bg: #07111f;
+      --card: rgba(13, 26, 45, 0.92);
+      --text: #eaf2ff;
+      --muted: #9fb2cc;
+      --line: rgba(139, 170, 211, 0.22);
+      --blue: #4da3ff;
+      --cyan: #4ef0d2;
+      --green: #7cf2a1;
+      --orange: #ffb86b;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      --radius: 26px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(77, 163, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(78, 240, 210, 0.12), transparent 28%),
+        linear-gradient(180deg, var(--bg), #050a12 75%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    .container { width: min(1180px, 92%); margin: 0 auto; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(7, 17, 31, 0.78);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 15px 0; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; }
+    .brand-dot {
+      width: 34px; height: 34px; border-radius: 12px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--blue), var(--cyan)); color: #06111f;
+    }
+    .links { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; color: var(--muted); font-weight: 800; font-size: 0.92rem; }
+    .links a:hover { color: var(--cyan); }
+    .available {
+      display: inline-flex; align-items: center; gap: 8px; color: var(--green);
+      background: rgba(124, 242, 161, 0.09); border: 1px solid rgba(124, 242, 161, 0.25);
+      padding: 7px 11px; border-radius: 999px; font-size: 0.85rem; font-weight: 800;
+    }
+    .available::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+    .hero { min-height: 86vh; display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 24px; padding: 54px 0 34px; }
+    .terminal-line { color: var(--cyan); margin-bottom: 18px; }
+    .hero h1 { font-size: clamp(3rem, 7vw, 6.3rem); line-height: 0.95; letter-spacing: -0.075em; margin-bottom: 18px; }
+    .headline-code {
+      display: inline-block; color: var(--green); border: 1px solid rgba(124, 242, 161, 0.26);
+      background: rgba(124, 242, 161, 0.08); padding: 10px 14px; border-radius: 14px; margin-bottom: 20px; font-weight: 850;
+    }
+    .hero-copy { color: #c8d7ea; font-size: 1.08rem; max-width: 760px; }
+    .hero-badges, .cta-row, .skill-controls, .tags, .chip-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    .hero-badges { margin: 24px 0; }
+    .badge, .chip {
+      border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: #dbeaff;
+      border-radius: 999px; padding: 8px 12px; font-weight: 800; font-size: 0.9rem;
+    }
+    .btn, .filter {
+      border: 1px solid var(--line); background: rgba(255,255,255,0.06); color: var(--text);
+      border-radius: 999px; padding: 10px 15px; font-weight: 900; cursor: pointer; transition: 0.2s ease;
+    }
+    .btn:hover, .filter:hover { transform: translateY(-2px); color: var(--cyan); border-color: rgba(78,240,210,0.5); }
+    .btn-primary, .filter.active { background: linear-gradient(135deg, var(--blue), var(--cyan)); color: #06111f; border: 0; }
+
+    .code-card, .card, .project-card, .timeline-card, .cert-card, .contact-panel {
+      background: linear-gradient(180deg, rgba(16,32,54,0.96), rgba(10,22,39,0.92));
+      border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .code-card { overflow: hidden; }
+    .window-top { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 0.88rem; font-weight: 800; }
+    .dots { display: flex; gap: 7px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+    .dot:nth-child(2) { background: #ffbd2e; } .dot:nth-child(3) { background: #28c840; }
+    .code-body { padding: 22px; color: #dceaff; font-size: 0.93rem; overflow-x: auto; }
+    .code-body .k { color: var(--blue); } .code-body .s { color: var(--green); } .code-body .n { color: var(--orange); } .code-body .c { color: #7e91aa; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
+    .stat { padding: 15px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,0.04); }
+    .stat strong { display: block; color: var(--cyan); font-size: 1.35rem; }
+    .stat span { color: var(--muted); font-size: 0.84rem; font-weight: 800; }
+
+    section { padding: 54px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 22px; margin-bottom: 24px; }
+    .section-kicker { color: var(--cyan); margin-bottom: 8px; font-weight: 900; }
+    .section-title { font-size: clamp(2rem, 4vw, 3.1rem); line-height: 1.05; letter-spacing: -0.055em; margin-bottom: 12px; }
+    .section-copy { color: var(--muted); max-width: 720px; font-size: 1.03rem; }
+
+    .about-grid, .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card, .cert-card, .contact-panel { padding: 24px; }
+    .icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .card h3, .cert-card h3 { font-size: 1.22rem; margin-bottom: 8px; }
+    .card p, .cert-card p, .project-card p { color: var(--muted); }
+
+    .skills-shell { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 18px; }
+    .proficiency, .skill-panel { padding: 24px; }
+    .bar-row { margin: 18px 0; }
+    .bar-label { display: flex; justify-content: space-between; color: #dbeaff; font-weight: 850; margin-bottom: 8px; }
+    .bar { height: 10px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
+    .bar > span { display: block; height: 100%; background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+    .search { width: 100%; margin-bottom: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,0.05); color: var(--text); outline: none; }
+    .chip.hidden, .project-card.hidden { display: none; }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .project-card { padding: 24px; transition: transform 0.2s ease; }
+    .project-card:hover, .timeline-card:hover { transform: translateY(-5px); }
+    .project-index { color: var(--cyan); font-weight: 950; margin-bottom: 14px; }
+    .project-card h3 { font-size: 1.32rem; margin-bottom: 10px; }
+    .tags { margin-top: 16px; }
+    .tags span { color: var(--green); background: rgba(124,242,161,0.08); border: 1px solid rgba(124,242,161,0.22); border-radius: 999px; padding: 6px 9px; font-weight: 850; font-size: 0.82rem; }
+
+    .timeline { display: grid; gap: 16px; }
+    .timeline-card { padding: 24px; cursor: pointer; transition: transform 0.2s ease; }
+    .timeline-top { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; }
+    .timeline-card h3 { font-size: 1.28rem; margin-bottom: 5px; }
+    .company, .timeline-summary { color: var(--muted); font-weight: 750; }
+    .date { color: var(--cyan); font-weight: 950; white-space: nowrap; }
+    .timeline-summary { margin-top: 12px; }
+    .details { display: none; margin-top: 16px; border-top: 1px solid var(--line); padding-top: 16px; }
+    .details.open { display: block; animation: fadeIn .25s ease; }
+    .details-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; list-style: none; }
+    .details-grid li { padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,0.04); color: var(--muted); }
+    .details-grid strong { color: var(--text); }
+
+    .cert-provider { color: var(--cyan); font-weight: 950; margin-bottom: 9px; }
+    .verified { display: inline-flex; margin-top: 14px; color: var(--green); font-weight: 900; }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .contact-row { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding: 14px 0; color: var(--muted); }
+    .contact-row strong { color: var(--text); }
+    .qr-card { text-align: center; }
+    .qr { width: 170px; height: 170px; margin: 20px auto; border-radius: 22px; background: repeating-linear-gradient(45deg, #fff 0 8px, #06111f 8px 16px); border: 12px solid #ffffff; opacity: 0.9; }
+
+    .copy-alert { position: fixed; right: 18px; bottom: 18px; background: linear-gradient(135deg, var(--blue), var(--cyan)); color: #06111f; padding: 12px 16px; border-radius: 16px; display: none; font-weight: 950; z-index: 99; }
+    footer { border-top: 1px solid var(--line); padding: 30px 0; color: var(--muted); text-align: center; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 950px) {
+      .hero, .skills-shell, .projects-grid, .about-grid, .cert-grid, .contact-grid, .details-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .nav-inner, .section-head, .timeline-top { align-items: flex-start; flex-direction: column; }
+      .links { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand mono" href="#top"><span class="brand-dot">MA</span> michael.alemu()</a>
+      <div class="links mono">
+        <span class="available">available</span>
+        <a href="#about">about</a><a href="#skills">skills</a><a href="#projects">projects</a><a href="#experience">experience</a><a href="#contact">contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" class="container">
+    <section class="hero">
+      <div>
+        <div class="terminal-line mono">michael@lakehouse:~/resume$ cat profile.md</div>
+        <h1>Michael Alemu</h1>
+        <div class="headline-code mono">SrDataEngineer("Azure", "Databricks", "Lakehouse")</div>
+        <p class="hero-copy">Senior Data Engineer focused on Databricks Lakehouse migration, PySpark pipelines, Delta Lake, and source-to-target validation.</p>
+        <div class="hero-badges">
+          <span class="badge">Azure Databricks</span><span class="badge">PySpark</span><span class="badge">Delta Lake</span><span class="badge">Unity Catalog</span><span class="badge">Informatica</span><span class="badge">Teradata</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#projects">explore_work()</a>
+          <a class="btn" href="#contact">contact()</a>
+          <button class="btn" onclick="window.print()">print()</button>
+        </div>
+      </div>
+
+      <aside class="code-card">
+        <div class="window-top mono"><span>engineer.py</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div>
+        <div class="code-body mono">
+<pre><span class="k">class</span> <span class="n">SeniorDataEngineer</span>:
+    name = <span class="s">"Michael Alemu"</span>
+    location = <span class="s">"Atlanta, GA"</span>
+    stack = [<span class="s">"Databricks"</span>, <span class="s">"PySpark"</span>, <span class="s">"Delta Lake"</span>]
+    focus = <span class="s">"Legacy → Lakehouse"</span>
+    outcome = <span class="s">"validated, governed, production-ready"</span></pre>
+          <div class="stats">
+            <div class="stat"><strong>DBX</strong><span>Lakehouse</span></div>
+            <div class="stat"><strong>ETL</strong><span>Migration</span></div>
+            <div class="stat"><strong>UAT</strong><span>Validation</span></div>
+            <div class="stat"><strong>CI/CD</strong><span>Delivery</span></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about">
+      <div class="section-head"><div><div class="section-kicker mono">About</div><h2 class="section-title">What I Do</h2><p class="section-copy">I modernize legacy data platforms into scalable Databricks Lakehouse solutions.</p></div></div>
+      <div class="about-grid">
+        <div class="card"><div class="icon">☁️</div><h3>Lakehouse Migration</h3><p>Informatica, Teradata, Oracle, and SQL Server to Databricks.</p></div>
+        <div class="card"><div class="icon">⚙️</div><h3>Pipeline Engineering</h3><p>PySpark, Spark SQL, Delta Lake, Jobs, and ADF orchestration.</p></div>
+        <div class="card"><div class="icon">✅</div><h3>Validation</h3><p>Schema checks, row counts, hash matching, and audit reporting.</p></div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="section-head"><div><div class="section-kicker mono">Skills</div><h2 class="section-title">Tech Stack</h2><p class="section-copy mono">Search or filter skills.</p></div></div>
+      <div class="skills-shell">
+        <div class="code-card proficiency">
+          <div class="bar-row"><div class="bar-label"><span>Databricks / Delta</span><span>95%</span></div><div class="bar"><span style="width:95%"></span></div></div>
+          <div class="bar-row"><div class="bar-label"><span>PySpark / SQL</span><span>93%</span></div><div class="bar"><span style="width:93%"></span></div></div>
+          <div class="bar-row"><div class="bar-label"><span>ETL Migration</span><span>94%</span></div><div class="bar"><span style="width:94%"></span></div></div>
+          <div class="bar-row"><div class="bar-label"><span>Validation</span><span>96%</span></div><div class="bar"><span style="width:96%"></span></div></div>
+        </div>
+        <div class="code-card skill-panel">
+          <input class="search mono" id="skillSearch" placeholder="search skills..." oninput="filterSkills()" />
+          <div class="skill-controls mono">
+            <button class="filter active" onclick="setSkillFilter('all', this)">All</button>
+            <button class="filter" onclick="setSkillFilter('platform', this)">Platform</button>
+            <button class="filter" onclick="setSkillFilter('engineering', this)">Engineering</button>
+            <button class="filter" onclick="setSkillFilter('migration', this)">Migration</button>
+          </div>
+          <div class="chip-grid">
+            <span class="chip" data-category="platform">Azure Databricks</span><span class="chip" data-category="platform">Delta Lake</span><span class="chip" data-category="platform">Unity Catalog</span><span class="chip" data-category="platform">ADF</span>
+            <span class="chip" data-category="engineering">PySpark</span><span class="chip" data-category="engineering">Spark SQL</span><span class="chip" data-category="engineering">Python</span><span class="chip" data-category="engineering">SQL</span>
+            <span class="chip" data-category="migration">Informatica Migration</span><span class="chip" data-category="migration">Teradata Migration</span><span class="chip" data-category="migration">ETL Conversion</span><span class="chip" data-category="migration">Data Validation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="section-head"><div><div class="section-kicker mono">Projects</div><h2 class="section-title">Selected Work</h2><p class="section-copy">Databricks migration, pipelines, and validation.</p></div><div class="skill-controls mono"><button class="filter active" onclick="filterProjects('all', this)">All</button><button class="filter" onclick="filterProjects('migration', this)">Migration</button><button class="filter" onclick="filterProjects('validation', this)">Validation</button><button class="filter" onclick="filterProjects('pipeline', this)">Pipelines</button></div></div>
+      <div class="projects-grid">
+        <article class="project-card" data-project="migration validation pipeline"><div class="project-index mono">01</div><h3>Informatica to Databricks Workbench</h3><p>Assessment, conversion, execution, job creation, validation, and tracking.</p><div class="tags"><span>Databricks</span><span>Informatica</span><span>PySpark</span></div></article>
+        <article class="project-card" data-project="migration validation"><div class="project-index mono">02</div><h3>Teradata to Lakehouse Migration</h3><p>Profiling, object creation, data movement, and reconciliation.</p><div class="tags"><span>Teradata</span><span>Delta Lake</span><span>Unity Catalog</span></div></article>
+        <article class="project-card" data-project="validation"><div class="project-index mono">03</div><h3>Delta Validation Framework</h3><p>Row counts, hash comparison, key checks, and mismatch reporting.</p><div class="tags"><span>Data Quality</span><span>Audit</span><span>Spark SQL</span></div></article>
+        <article class="project-card" data-project="pipeline"><div class="project-index mono">04</div><h3>Enterprise Databricks Pipelines</h3><p>Bronze, silver, and gold pipelines for analytics and reporting.</p><div class="tags"><span>PySpark</span><span>ADF</span><span>Jobs</span></div></article>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="section-head"><div><div class="section-kicker mono">Experience</div><h2 class="section-title">Career Timeline</h2><p class="section-copy mono">Click to expand.</p></div></div>
+      <div class="timeline">
+        <article class="timeline-card" onclick="toggleDetails('bp')"><div class="timeline-top"><div><div class="date mono">Present</div><h3>Sr. Data Engineer</h3><div class="company">Blueprint Technologies</div></div><div class="date mono">Apr 2025 → Present</div></div><p class="timeline-summary">Databricks migration, pipelines, validation, and UAT delivery.</p><div class="details open" id="bp"><ul class="details-grid"><li><strong>Migration:</strong> Informatica and Teradata to Databricks.</li><li><strong>Workbench:</strong> Conversion, execution, validation, and tracking.</li><li><strong>Pipelines:</strong> Bronze, silver, gold Lakehouse pipelines.</li><li><strong>Validation:</strong> Row count, schema, key, and hash checks.</li></ul></div></article>
+        <article class="timeline-card" onclick="toggleDetails('rt')"><div class="timeline-top"><div><div class="date mono">Current</div><h3>Sr. Azure Engineer / Solution Architect</h3><div class="company">RaceTrac</div></div><div class="date mono">Apr 2022 → Present</div></div><p class="timeline-summary">Azure data architecture and Databricks delivery.</p><div class="details" id="rt"><ul class="details-grid"><li><strong>Architecture:</strong> Azure, Databricks, ADF, SQL, Python.</li><li><strong>Modernization:</strong> Legacy systems to cloud analytics.</li><li><strong>Pipelines:</strong> Batch and streaming data processing.</li><li><strong>Enablement:</strong> BI-ready and analytics-ready data.</li></ul></div></article>
+        <article class="timeline-card" onclick="toggleDetails('prev')"><div class="timeline-top"><div><div class="date mono">Prior</div><h3>Data Engineering & Modernization</h3><div class="company">Home Depot · CDC · Lockheed Martin · Solix</div></div><div class="date mono">Earlier Career</div></div><p class="timeline-summary">Data warehouse migration, SQL engineering, and reporting.</p><div class="details" id="prev"><ul class="details-grid"><li><strong>Migration:</strong> Teradata to GCP.</li><li><strong>Modernization:</strong> CDC cloud data work.</li><li><strong>SQL:</strong> SQL Server, SSIS, SSRS.</li><li><strong>Reporting:</strong> Analytics and BI support.</li></ul></div></article>
+      </div>
+    </section>
+
+    <section id="certs">
+      <div class="section-head">
+        <div>
+          <div class="section-kicker mono">Education & Certifications</div>
+          <h2 class="section-title">Credentials</h2>
+        </div>
+      </div>
+
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div class="cert-provider mono">University of Texas, Texas McCombs</div>
+          <h3>Postgraduate Program in Cloud Computing</h3>
+          <p>Completed in 2023.</p>
+          <span class="verified">✓ Education</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Kennesaw State University</div>
+          <h3>Information Technology & Computer Science</h3>
+          <p>Prospective Graduate Student.</p>
+          <span class="verified">✓ Education</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Oklahoma State University</div>
+          <h3>Master of Science in International Business</h3>
+          <p>Completed January 2011.</p>
+          <span class="verified">✓ Graduate Degree</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Databricks</div>
+          <h3>Databricks Certified Data Engineer Associate</h3>
+          <p>Certified in 2023.</p>
+          <span class="verified">✓ Certified</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Databricks</div>
+          <h3>Databricks Professional Certified Data Engineer Associate</h3>
+          <p>Certified in 2025.</p>
+          <span class="verified">✓ Certified</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Databricks</div>
+          <h3>Databricks Solution Architect Champion</h3>
+          <p>Databricks architecture and Lakehouse delivery recognition.</p>
+          <span class="verified">✓ Recognized</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Microsoft</div>
+          <h3>Microsoft Certified Data Engineer Associate</h3>
+          <p>Certified in 2021.</p>
+          <span class="verified">✓ Certified</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Microsoft Azure</div>
+          <h3>Azure AI Fundamentals — AI-900</h3>
+          <p>Certified in 2025.</p>
+          <span class="verified">✓ Certified</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Microsoft Azure</div>
+          <h3>Azure Cloud Fundamentals</h3>
+          <p>Azure cloud foundation certification.</p>
+          <span class="verified">✓ Certified</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Microsoft SQL Server</div>
+          <h3>Microsoft SQL Certified Professional</h3>
+          <p>Certified in 2012 and 2014.</p>
+          <span class="verified">✓ Certified</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-provider mono">Palantir</div>
+          <h3>Palantir Data Engineering Professional</h3>
+          <p>Certified in 2023.</p>
+          <span class="verified">✓ Certified</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-head"><div><div class="section-kicker mono">Contact</div><h2 class="section-title">Let’s connect.</h2><p class="section-copy">Databricks migration, Lakehouse, data validation, and senior data engineering roles.</p></div></div>
+      <div class="contact-grid">
+        <div class="contact-panel">
+          <div class="contact-row"><strong>Location</strong><span>Atlanta, GA</span></div>
+          <div class="contact-row"><strong>Email</strong><span id="emailText">michael.sqldba@yahoo.com</span></div>
+          <div class="contact-row"><strong>Phone</strong><span>404-988-1210</span></div>
+          <div class="contact-row"><strong>LinkedIn</strong><span>https://www.linkedin.com/in/michael-a-8b8323b6/</span></div>
+          <div class="cta-row"><button class="btn btn-primary" onclick="copyEmail()">copy_email()</button><button class="btn" onclick="copyUrl()">copy_url()</button></div>
+        </div>
+        <div class="contact-panel qr-card"><div class="section-kicker mono">QR</div><h3>Scan profile</h3><div class="qr"></div><p class="section-copy mono">Replace with real QR after publishing.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="copy-alert" id="copyAlert">Copied</div>
+  <footer><div class="container">© 2026 Michael Alemu • Sr. Data Engineer • Azure Databricks</div></footer>
+
+  <script>
+    let activeSkillFilter = 'all';
+    function toggleDetails(id) { document.getElementById(id).classList.toggle('open'); }
+    function setSkillFilter(category, button) {
+      activeSkillFilter = category;
+      document.querySelectorAll('#skills .filter').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      filterSkills();
+    }
+    function filterSkills() {
+      const search = document.getElementById('skillSearch').value.toLowerCase();
+      document.querySelectorAll('.chip').forEach(chip => {
+        const matchCategory = activeSkillFilter === 'all' || chip.dataset.category === activeSkillFilter;
+        const matchSearch = chip.innerText.toLowerCase().includes(search);
+        chip.classList.toggle('hidden', !(matchCategory && matchSearch));
+      });
+    }
+    function filterProjects(category, button) {
+      document.querySelectorAll('#projects .filter').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.classList.toggle('hidden', !(category === 'all' || card.dataset.project.includes(category)));
+      });
+    }
+    function copyEmail() {
+      navigator.clipboard.writeText(document.getElementById('emailText').innerText);
+      showCopied();
+    }
+    function copyUrl() {
+      navigator.clipboard.writeText(window.location.href);
+      showCopied();
+    }
+    function showCopied() {
+      const alert = document.getElementById('copyAlert');
+      alert.style.display = 'block';
+      setTimeout(() => alert.style.display = 'none', 1600);
+    }
+  </script>
+</body>
+</html>
